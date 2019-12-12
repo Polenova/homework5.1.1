@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">hw5.1.1</string>
+    <string name="call">call</string>
+    <string name="contact">contact</string>
+    <string name="remove">удалить</string>
+    <string name="add">добавить</string>
+    <string name="message">сообщение</string>
+    <string name="number">введите номер</string>
+</resources>
