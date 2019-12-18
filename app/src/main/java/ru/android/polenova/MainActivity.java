@@ -1,15 +1,12 @@
 package ru.android.polenova;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,18 +17,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Drawable> images = new ArrayList<>();
     private List<ContactItem> contacts = new ArrayList<>();
-
+    BaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = findViewById(R.id.list);
         generateRandomContactItem();
-        BaseAdapter adapter = new ContactAdapter(this, contacts);
+        adapter = new ContactAdapter(this, contacts);
+        ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
 
         Button addButton = findViewById(R.id.buttonAdd);
@@ -57,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> textAddList = new ArrayList<>();
         textAddList.add(stringNumber);
         textAddList.add(stringMessage);
-        FileUtils.updateTextFile(this, textAddList);
+        FileUtils.appendTextFile(this, textAddList);
     }
-
 
     private ArrayList ReadText() {
         ArrayList<String> textList = new ArrayList<>();
@@ -80,12 +75,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<ContactItem> generateRandomContactItem() {
-        final ArrayList<String> text = ReadText();
-        for (String string : text) {
+        ArrayList<String> textRead = ReadText();
+        final ArrayList<String> textSplit = new ArrayList<>();
+        for (String string : textRead) {
             String[] string1 = string.split(";");
-            contacts.add(new ContactItem(string1[0], string1[1], null));
+            for (int j = 0; j < string1.length; j++) {
+                textSplit.add(string1[j]);
+            }
+            for (int i = 0, length = textSplit.size(); i < length; i += 2) {
+                contacts.add(new ContactItem(textSplit.get(i), textSplit.get(i + 1), null));
+            }
         }
         return contacts;
     }
 }
+
+
+
 

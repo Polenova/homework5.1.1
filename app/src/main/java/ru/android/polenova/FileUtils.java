@@ -1,9 +1,7 @@
 package ru.android.polenova;
 
-
 import android.content.Context;
 import android.os.Environment;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,12 +38,20 @@ public class FileUtils {
         return file;
     }
 
-    public static void updateTextFile(Context context, ArrayList<String> arrayList) throws IOException {
-        FileWriter writer = new FileWriter(getTextFile(context, false));
-        for (String text : arrayList) {
-            writer.write(text + " ; ");
+    public static void appendTextFile(Context context, ArrayList<String> arrayList) throws IOException {
+        updateTextFile(context, arrayList, true);
+    }
+
+    public static void rewriteTextFile(Context context, ArrayList<String> arrayList) throws IOException {
+        updateTextFile(context, arrayList, false);
+    }
+
+    public static void updateTextFile(Context context, ArrayList<String> arrayList, boolean append) throws IOException {
+        try (FileWriter writer = new FileWriter(getTextFile(context, false), append)) {
+            for (String text : arrayList) {
+                writer.write(text + ";");
+            }
+            writer.flush();
         }
-        writer.flush();
-        writer.close();
     }
 }

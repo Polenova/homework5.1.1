@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +32,17 @@ public class ContactAdapter extends BaseAdapter {
     void removeItem(int position) {
         contactItemList.remove(position);
         ArrayList<String> contacts = new ArrayList<>();
-        for (String cnt : contacts) {
-            contacts.add(cnt);
+        for (ContactItem cnt : contactItemList) {
+            contacts.add(cnt.getCallContact());
+            contacts.add(cnt.getContactInfo());
         }
         try {
-            FileUtils.updateTextFile(myContext, contacts);
+            FileUtils.rewriteTextFile(myContext, contacts);
         } catch (EOFException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         notifyDataSetChanged();
     }
 
